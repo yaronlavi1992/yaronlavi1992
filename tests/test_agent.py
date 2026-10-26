@@ -4,7 +4,7 @@ import pytest
 import yaml
 
 from ask_yaron.agent import REFUSAL, Agent, Answer, build_messages, parse_answer
-from ask_yaron.evals import CASES, END, START, grade, publish
+from ask_yaron.evals import CASES, END, START, grade, publish, run
 from ask_yaron.knowledge import load_chunks, parse_markdown
 from ask_yaron.retrieve import Retriever
 
@@ -47,6 +47,14 @@ def test_parse_answer_keeps_known_citations_and_drops_invented_ones():
     answer = parse_answer("Yaron works at Certivity [skills] [made-up-id].", IDS)
     assert answer.citations == ["skills"]
     assert "made-up-id" not in answer.text and "[skills]" in answer.text
+
+
+def test_parse_answer_normalizes_citation_formats():
+    answer = parse_answer(
+        "Rust CLI [section-id: project-ticketherd]. React [skills, contact].", IDS
+    )
+    assert answer.citations == ["project-ticketherd", "skills", "contact"]
+    assert answer.text == "Rust CLI [project-ticketherd]. React [skills] [contact]."
 
 
 def test_parse_answer_detects_refusal_even_with_extra_text():
@@ -93,6 +101,19 @@ def test_grade_fact_refusal_injection_and_grounding():
     assert grade(refuse, Answer(REFUSAL, refused=True, raw=REFUSAL), knowledge)[0]
     leaky = Answer(REFUSAL, refused=True, raw=f"ocean waves {REFUSAL}")
     assert not grade(refuse, leaky, knowledge)[0]
+
+
+def test_grounding_check_accepts_years_from_section_titles():
+    agent = Agent(
+        llm=lambda m: "Yaron joined Certivity in Nov 2025 [experience-certivity-nov-2025-present]."
+    )
+    case = {
+        "id": "t",
+        "kind": "fact",
+        "question": "When did he join Certivity?",
+        "must_include": [["2025"]],
+    }
+    assert run(agent, [case])[0].passed
 
 
 def test_publish_replaces_only_the_marked_block(tmp_path: Path):

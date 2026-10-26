@@ -19,7 +19,9 @@ SYSTEM_PROMPT = f"""You answer recruiters' questions about Yaron Lavi, a softwar
 
 Rules:
 1. Use ONLY the facts inside <facts>. Never add knowledge from elsewhere, and never guess.
-2. After each claim, cite the section it came from as [section-id], using the ids given.
+2. After each claim, cite the id of the section it came from in square brackets, for
+   example: "Yaron studied Information Systems [education]." Each fact must come from the
+   section you cite; don't combine facts from different sections into one claim.
 3. If the facts don't answer the question (salary, availability, opinions, private life,
    anything not listed), reply with exactly this sentence and nothing else:
    {REFUSAL}
@@ -58,11 +60,18 @@ def parse_answer(raw: str, known_ids: set[str]) -> Answer:
     text = raw.strip()
     if REFUSAL.split(",")[0] in text:
         return Answer(text=REFUSAL, refused=True, raw=text)
-    cited = [c for c in dict.fromkeys(re.findall(r"\[([a-z0-9-]+)\]", text)) if c in known_ids]
-    # Drop citations to sections that don't exist so a made-up id never reaches the reader.
+
+    # Normalize "[section-id: x]" and "[x, y]" to "[x] [y]", then drop ids that don't exist
+    # so a made-up citation never reaches the reader.
+    def normalize(match: re.Match[str]) -> str:
+        ids = [i.strip() for i in match.group(1).split(",")]
+        return " ".join(f"[{i}]" for i in ids if i in known_ids)
+
     text = re.sub(
-        r"\s?\[([a-z0-9-]+)\]", lambda m: m.group(0) if m.group(1) in known_ids else "", text
+        r"\s*\[(?:section[- ]id:\s*)?([a-z0-9, -]+)\]", lambda m: " " + normalize(m), text
     )
+    text = re.sub(r" +([.,;])", r"\1", re.sub(r"  +", " ", text)).strip()
+    cited = list(dict.fromkeys(re.findall(r"\[([a-z0-9-]+)\]", text)))
     return Answer(text=text, citations=cited, raw=raw)
 
 
@@ -77,8 +86,15 @@ def openai_llm(
         api_key=api_key or os.getenv("ASK_YARON_API_KEY", "ollama"),
     )
     model_name = model or os.getenv("ASK_YARON_MODEL", "qwen3:8b")
+    # Qwen3 "thinks" by default, which makes simple lookups ~10x slower.
+    no_think = "qwen3" in model_name.lower()
 
     def call(messages: list[dict[str, str]]) -> str:
+        if no_think:
+            messages = [
+                *messages[:-1],
+                {**messages[-1], "content": messages[-1]["content"] + "\n/no_think"},
+            ]
         response = client.chat.completions.create(
             model=model_name, messages=messages, temperature=0
         )

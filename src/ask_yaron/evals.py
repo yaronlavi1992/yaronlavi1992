@@ -54,7 +54,7 @@ def grade(case: dict, answer: Answer, knowledge_text: str) -> tuple[bool, str]:
 
 
 def run(agent: Agent, cases: list[dict]) -> list[Result]:
-    knowledge_text = "\n".join(c.text for c in agent.chunks)
+    knowledge_text = "\n".join(f"{c.title}\n{c.text}" for c in agent.chunks)
     results = []
     for case in cases:
         answer = agent.ask(case["question"])

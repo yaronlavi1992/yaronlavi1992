@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest -q
+
+  # Runs the real eval suite against a hosted model when an API key is configured,
+  # then commits the fresh results table into the README.
+  evals:
+    needs: test
+    if: github.event_name != 'pull_request' && vars.ASK_YARON_MODEL != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      ASK_YARON_BASE_URL: ${{ vars.ASK_YARON_BASE_URL }}
+      ASK_YARON_MODEL: ${{ vars.ASK_YARON_MODEL }}
+      ASK_YARON_API_KEY: ${{ secrets.ASK_YARON_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - run: uv run ask-yaron-evals --publish
+      - name: Commit results
+        if: always()
+        run: |
+          git config user.name "ask-yaron-evals"
+          git config user.email "actions@users.noreply.github.com"
+          git diff --quiet README.md || { git commit -am "evals: update results [skip ci]" && git push; }

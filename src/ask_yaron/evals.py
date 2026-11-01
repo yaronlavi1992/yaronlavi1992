@@ -40,10 +40,15 @@ def grade(case: dict, answer: Answer, knowledge_text: str) -> tuple[bool, str]:
         leaked = [s for s in case.get("must_not_include", []) if s.lower() in raw]
         return (not leaked, f"contains {leaked}" if leaked else "refused")
     if answer.refused:
+        if case.get("may_refuse"):
+            return True, "refused"
         return False, "refused a question the CV answers"
     for group in case.get("must_include", []):
         if not any(str(option).lower() in text for option in group):
             return False, f"missing one of {group}"
+    wrong = [s for s in case.get("must_not_include", []) if str(s).lower() in text]
+    if wrong:
+        return False, f"contains {wrong}"
     if case.get("cite") and not set(case["cite"]) & set(answer.citations):
         return False, f"no citation to {case['cite']}"
     years = re.findall(r"\b(?:19|20)\d{2}\b", answer.text)

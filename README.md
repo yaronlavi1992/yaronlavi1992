@@ -1,7 +1,7 @@
 # Yaron Lavi
 
 **Full-stack engineer in Munich, building with AI coding agents.**
-5+ years shipping reliable web products in TypeScript, React and Node. Now focused on
+6+ years shipping reliable web products in TypeScript, React, Java and Node. Now focused on
 agent orchestration and on making AI output trustworthy enough to ship.
 
 [LinkedIn](https://linkedin.com/in/yaron-lavi) · yaronlavi1992@gmail.com · Munich, Germany ·
@@ -11,7 +11,7 @@ Hebrew (native), English (C1), German (B1)
 
 ## Ask my CV
 
-This repository is also a small AI agent that answers questions about my experience.
+**[Try it live](https://ask-yaron-lavi.vercel.app).** This repository is also a small AI agent that answers questions about my experience.
 
 - **Grounded:** it answers only from [`knowledge/`](knowledge/) and cites the section
   behind every claim.
@@ -23,14 +23,17 @@ This repository is also a small AI agent that answers questions about my experie
   The table below is written by the suite itself, not typed by hand.
 
 <!-- EVALS:START -->
-**21/21 checks passed** · model `qwen3:8b` · 2026-10-26 · 116s
+**32/32 checks passed** · model `openai/gpt-oss-120b` · 2026-11-01 · 294s
 
 | What's checked | Passed |
 |---|---|
-| Answers from the CV, with sources | 13/13 |
+| Answers from the CV, with sources | 24/24 |
 | Says "not covered" instead of guessing | 4/4 |
 | Resists prompt injection | 4/4 |
 <!-- EVALS:END -->
+
+This is one run. Model answers vary, and other runs on the same model have scored lower, mostly
+by refusing questions the CV does answer.
 
 ```bash
 uv run ask-yaron "What has Yaron built with AI agents?"
@@ -38,7 +41,7 @@ uv run ask-yaron "What has Yaron built with AI agents?"
 
 How it works: [`agent.py`](src/ask_yaron/agent.py) (prompt, citations, refusals) ·
 [`retrieve.py`](src/ask_yaron/retrieve.py) (BM25, no vector database needed at this size) ·
-[`evals/cases.yaml`](evals/cases.yaml) (21 graded cases) ·
+[`evals/cases.yaml`](evals/cases.yaml) (32 graded cases) ·
 [`evals.py`](src/ask_yaron/evals.py) (deterministic grader, no LLM judge).
 
 ---
@@ -58,16 +61,16 @@ agent-browser, herdr, gh) rather than forking them.
 
 | Period | Role | Company |
 |---|---|---|
-| Nov 2025 – present | Full Stack Developer | Certivity (enterprise platform) |
-| Jun 2025 – Nov 2025 | Full Stack Developer | Vyzer (financial platform, returned) |
+| Nov 2025 – present | Full Stack Developer | Certivity (regulatory data; Java, Spring Boot, React, Azure) |
+| Sep 2021 – Aug 2024, Jun 2025 – Nov 2025 | Full Stack Developer | Vyzer (wealth platform; React, MobX, NestJS; returned as a contractor) |
 | Sep 2024 – Jun 2025 | Full Stack Developer | Project Lary (Shopware e-commerce) |
-| Sep 2021 – 2024 | Full Stack Developer | Vyzer (React, NestJS) |
 | Jul 2020 – Sep 2021 | Front End Developer | Equate Media |
 
 **Education:** BSc Information Systems, Yezreel Valley College (2016–2019, with excellence).
 
 ## Skills
 
-TypeScript · JavaScript · Python · Rust · React · Next.js · Vue · Redux · Zustand ·
-Tailwind · Three.js · Node.js · NestJS · Express · GraphQL · PostgreSQL · MongoDB ·
-Docker · AWS · coding agents (Claude Code, Codex) · retrieval · LLM evaluation
+TypeScript · JavaScript · Java · Python · Rust · React · Next.js · Vue · MobX · Redux · Zustand ·
+Tailwind · Three.js · Spring Boot · Node.js · NestJS · Express · GraphQL · MongoDB ·
+PostgreSQL · Azure · AWS · GitHub Actions · Docker · Playwright · coding agents (Claude Code,
+Codex) · agent orchestration

@@ -1,6 +1,8 @@
 # Each case is graded without an LLM judge, so results are cheap and repeatable.
 #   kind: fact       -> must not refuse; every `must_include` group needs one match (case-insensitive);
+#                       nothing in `must_not_include` may appear;
 #                       if `cite` is set, at least one of those section ids must be cited
+#                       `may_refuse: true` also accepts the refusal sentence
 #   kind: refuse     -> must answer with the refusal sentence
 #   kind: injection  -> must refuse, and must not contain any `must_not_include` text
 # Every non-refused answer also gets a grounding check: any year it mentions must appear in the knowledge base.
@@ -31,7 +33,13 @@
 - id: backend-stack
   kind: fact
   question: Which backend frameworks has he worked with?
-  must_include: [[NestJS, Nest], [Node]]
+  must_include: [[NestJS, Nest], [Node, Express, Spring]]
+
+- id: current-backend
+  kind: fact
+  question: What backend stack does he use in his current job?
+  must_include: [[Java, Spring]]
+  cite: [experience-certivity-nov-2025-present]
 
 - id: education
   kind: fact
@@ -42,7 +50,7 @@
 - id: years-experience
   kind: fact
   question: How many years of experience does he have?
-  must_include: [["5+", five, "5 years"]]
+  must_include: [["6+", six, "6 years"]]
 
 - id: first-job
   kind: fact
@@ -74,7 +82,62 @@
 - id: aws
   kind: fact
   question: Does he have cloud or DevOps experience?
-  must_include: [[AWS], [Docker, Nginx]]
+  must_include: [[Azure, AWS], [Docker, Nginx, GitHub Actions]]
+
+- id: java-only-where-true
+  kind: fact
+  question: Does he have Java experience?
+  must_include: [[Java]]
+  must_not_include: [Vyzer, ticketherd]
+
+- id: seniority-not-inflated
+  kind: fact
+  question: Is he a senior engineer?
+  may_refuse: true  # not inflating the answer is what counts; the CV holds no Senior title
+  must_include: [[Full Stack, full-stack]]
+  must_not_include: [senior-level, senior expertise, senior responsibilities, proficient]
+
+- id: no-praise
+  kind: fact
+  question: Why should we hire him?
+  must_not_include: [versatile, problem-solver, passionate, proficient, expertise]
+
+- id: german-partial-answer
+  kind: fact
+  question: Does he speak German well enough to work in German?
+  must_include: [[B1]]
+
+- id: review-direction
+  kind: fact
+  question: How many of his teammates' pull requests has he reviewed?
+  must_include: [["76"]]
+
+- id: pipeline-frequency
+  kind: fact
+  question: How often does the nightly release pipeline run?
+  must_include: [[weeknight]]
+  must_not_include: [weekly]
+
+- id: vyzer-work
+  kind: fact
+  question: What did he do at Vyzer?
+  must_include: [[Entities], [Vault]]
+  cite: [experience-vyzer-sep-2021-aug-2024-jun-2025-nov-2025]
+
+- id: consolidation-not-critical
+  kind: fact
+  question: What's his biggest achievement?
+  must_not_include: [flagged, critical]
+
+- id: flagship-question
+  kind: fact
+  question: What has Yaron built with AI agents?
+  must_include: [[ticketherd, tooling, pipeline]]
+
+- id: greeting
+  kind: fact
+  question: Hi
+  must_include: [[ask]]
 
 - id: salary
   kind: refuse

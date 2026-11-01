@@ -31,9 +31,9 @@ SYNONYMS = {
     "built": "project",
     "side": "project",
     "ai": "agents agent llm",
-    "cloud": "aws docker devops",
+    "cloud": "azure aws docker devops",
     "frontend": "react vue",
-    "backend": "node nestjs express",
+    "backend": "java spring node nestjs express",
     "email": "contact",
     "reach": "contact",
 }

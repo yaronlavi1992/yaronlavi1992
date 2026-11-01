@@ -45,7 +45,8 @@ Key Vault), GitHub Actions, Playwright.
 
 ## Experience: Vyzer (Sep 2021 - Aug 2024, Jun 2025 - Nov 2025)
 Full Stack Developer at Vyzer, a wealth management platform for private-market investors, in
-React, MobX and NestJS. Employee from 2021 to 2024, then returned as a contractor in 2025.
+React, MobX and NestJS. Joined as the third developer. Employee from 2021 to 2024, then
+returned as a contractor in 2025.
 - Built Entities, across frontend and backend: an interactive graph where investors map their
   holding structure, with the hierarchy editable on screen and kept consistent with the API,
   the entity list and per-entity portfolio views.

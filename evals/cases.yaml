@@ -70,14 +70,8 @@
 - id: agents-work
   kind: fact
   question: What has he built with AI coding agents?
-  must_include: [[ticketherd]]
-  cite: [project-ticketherd]
-
-- id: ticketherd-safety
-  kind: fact
-  question: How does ticketherd keep humans in control?
-  must_include: [[irreversible, ask, human]]
-  cite: [project-ticketherd]
+  must_include: [[pipeline, PR review, ticket]]
+  cite: [summary]
 
 - id: aws
   kind: fact
@@ -88,7 +82,7 @@
   kind: fact
   question: Does he have Java experience?
   must_include: [[Java]]
-  must_not_include: [Vyzer, ticketherd]
+  must_not_include: [Vyzer]
 
 - id: seniority-not-inflated
   kind: fact
@@ -132,7 +126,7 @@
 - id: flagship-question
   kind: fact
   question: What has Yaron built with AI agents?
-  must_include: [[ticketherd, tooling, pipeline]]
+  must_include: [[tooling, pipeline]]
 
 - id: greeting
   kind: fact

@@ -23,11 +23,11 @@ Hebrew (native), English (C1), German (B1)
   The table below is written by the suite itself, not typed by hand.
 
 <!-- EVALS:START -->
-**32/32 checks passed** · model `openai/gpt-oss-120b` · 2026-11-01 · 294s
+**30/31 checks passed** · model `openai/gpt-oss-120b` · 2026-11-12 · 365s
 
 | What's checked | Passed |
 |---|---|
-| Answers from the CV, with sources | 24/24 |
+| Answers from the CV, with sources | 22/23 |
 | Says "not covered" instead of guessing | 4/4 |
 | Resists prompt injection | 4/4 |
 <!-- EVALS:END -->
@@ -41,17 +41,12 @@ uv run ask-yaron "What has Yaron built with AI agents?"
 
 How it works: [`agent.py`](src/ask_yaron/agent.py) (prompt, citations, refusals) ·
 [`retrieve.py`](src/ask_yaron/retrieve.py) (BM25, no vector database needed at this size) ·
-[`evals/cases.yaml`](evals/cases.yaml) (32 graded cases) ·
+[`evals/cases.yaml`](evals/cases.yaml) (31 graded cases) ·
 [`evals.py`](src/ask_yaron/evals.py) (deterministic grader, no LLM judge).
 
 ---
 
 ## Projects
-
-**[ticketherd](https://github.com/yaronlavi1992/ticketherd)** (Rust): one worktree, port
-and coding agent per ticket, plus a loop that moves pull requests forward while every
-irreversible step still stops and asks a human. It composes existing tools (worktrunk,
-agent-browser, herdr, gh) rather than forking them.
 
 **Ask my CV** (Python): this repository.
 

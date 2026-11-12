@@ -37,7 +37,7 @@ Rules:
    that job's own section names it.
 7. The question can be in any language. Understand it and answer in English.
 8. Write one claim per sentence, each sentence naming what it is about and ending with its
-   citation. Keep Certivity work and ticketherd in separate sentences, each citing its section."""
+   citation. Keep each job and each project in its own sentences, each citing its section."""
 
 GREETING = "Hi! Ask me anything about Yaron's experience, projects or skills."
 GREETING_RE = re.compile(r"^(hi|hello|hey|hallo|servus|shalom)\b[\s!.,]*(there)?[\s!.,]*$", re.I)
@@ -49,7 +49,7 @@ CLAIM_WORDS = {
     "mentored", "proficient", "senior", "senior-level", "versatile", "weekly",
 }  # fmt: skip
 # Lowercase names still need the section that names them.
-NAME_WORDS = {"ticketherd", "vyzer", "certivity", "shopware", "worktrunk", "herdr"}
+NAME_WORDS = {"vyzer", "certivity", "shopware"}
 ALWAYS_ALLOWED = {"yaron", "lavi", "he", "his", "him", "the", "a", "an", "at", "in", "as"}
 MONTHS = "january february march april may june july august september october november december"
 SENTENCE_RE = re.compile(r"(?<=[.!?])\s+|\n+")

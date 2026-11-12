@@ -22,7 +22,7 @@ IDS = {c.id for c in CHUNKS}
 
 def test_knowledge_sections_have_unique_ids():
     assert len(IDS) == len(CHUNKS) > 10
-    assert {"summary", "skills", "education", "project-ticketherd"} <= IDS
+    assert {"summary", "skills", "education", "project-architect-haven"} <= IDS
 
 
 def test_parse_markdown_ignores_text_before_first_section():
@@ -39,7 +39,7 @@ def test_phone_number_is_not_in_the_knowledge_base():
     [
         ("What did he study?", "education"),
         ("Shopware e-commerce", "experience-project-lary-sep-2024-jun-2025"),
-        ("coding agents worktree", "project-ticketherd"),
+        ("3D visualization Three.js", "project-architect-haven"),
         ("German level", "languages"),
         ("Java Spring Boot release pipeline", "experience-certivity-nov-2025-present"),
     ],
@@ -60,15 +60,15 @@ def test_parse_answer_keeps_known_citations_and_drops_invented_ones():
 
 def test_parse_answer_normalizes_citation_formats():
     answer = parse_answer(
-        "Rust CLI [section-id: project-ticketherd]. React [skills, contact].", IDS
+        "3D tool [section-id: project-architect-haven]. React [skills, contact].", IDS
     )
-    assert answer.citations == ["project-ticketherd", "skills", "contact"]
-    assert answer.text == "Rust CLI [project-ticketherd]. React [skills] [contact]."
+    assert answer.citations == ["project-architect-haven", "skills", "contact"]
+    assert answer.text == "3D tool [project-architect-haven]. React [skills] [contact]."
 
 
 def test_parse_answer_normalizes_typographic_hyphens_in_citations():
-    answer = parse_answer("Built a CLI [project\u2011ticketherd].", IDS)
-    assert answer.citations == ["project-ticketherd"]
+    answer = parse_answer("Built a 3D tool [project\u2011architect\u2011haven].", IDS)
+    assert answer.citations == ["project-architect-haven"]
 
 
 def test_parse_answer_normalizes_lenticular_citation_brackets():
@@ -93,7 +93,7 @@ def verified(text):
 def test_verify_drops_sentence_naming_something_its_section_lacks():
     answer = verified(
         "Yaron has Java experience [skills]. "
-        "He used it in ticketherd and Vyzer [project-ticketherd]."
+        "He used it at Vyzer [project-architect-haven]."
     )
     assert answer.text == "Yaron has Java experience [skills]."
     assert answer.citations == ["skills"]
@@ -107,7 +107,7 @@ def test_verify_drops_uncited_sentences_and_claim_words():
 
 
 def test_verify_checks_lowercase_project_names():
-    answer = verified("His team's pipeline runs on ticketherd [summary].")
+    answer = verified("His team's pipeline runs on Shopware [summary].")
     assert answer.refused
 
 
